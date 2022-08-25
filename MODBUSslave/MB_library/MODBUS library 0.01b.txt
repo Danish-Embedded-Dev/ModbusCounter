@@ -1,0 +1,15 @@
+Beta
+Written by Jason Vreeland [CodeRage]
+Released 3/7/2010 under GNU license
+
+
+Edit by M.danish 
+development 9/25/2022
+
+-> Serial instance name change to ModSerial which define explicitly in the main code 
+   e.g ModSerial Serial, ModSerial Serial1, ModSerial Serial2
+
+-> edit external epprom functionality in set function of ModbusRegBank.c file 
+
+-> modbusslave library is not using instead embedded into main code (bug faced Serial shifting )
+   [comments: Serial is working fine in library but Serial1,Serial2 is not working ]
