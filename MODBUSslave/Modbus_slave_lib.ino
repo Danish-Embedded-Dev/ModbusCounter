@@ -51,13 +51,10 @@ void setBaud(word baud,byte SerialConfig)
 {
   _baud = baud;
   //calculate the time perdiod for 3 characters for the given bps in ms.
-  _frameDelay = 24000/_baud;
-//  port = &Serial;
-  ModSerial.begin(baud,SerialConfig);
-  //ModSerial.begin(baud);
- 
-  ModSerial.flush();
-  //ModSerial.flush();
+  _frameDelay = 24000/_baud; 
+  
+  ModSerial.begin(baud,SerialConfig); 
+  ModSerial.flush(); 
   
 }
 

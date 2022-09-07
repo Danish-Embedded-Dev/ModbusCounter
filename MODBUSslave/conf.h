@@ -42,18 +42,19 @@
 //}; Byte_type EEPROM_DATA;
 
 struct  Default_variable {
-  byte device_id = 1;       //modbus device ID 0-255
+  byte device_id = 1;         //modbus device ID 0-255
   int mod_config = SERIAL_8N1;//default is SERIAL_8N1 from core
   int mod_baud    = 9600;     //default baudrate is 9600
   int net_timeout = 60;       //60 second network timeout for event update 
+  int debounce_tm = 100;       //routine time for timer is debouncing time in milliseconds
   uint32_t lst_epoch_c1 = 0 ; //last event epoch time for counter 1 
   uint32_t lst_epoch_c2 = 0 ; //last event epoch time for counter 2 
   uint16_t count_1a = 0;      //use for shift A counter_1
   uint16_t count_2a = 0;      //use for shift A counter_2
-  uint16_t count_1b = 0;      //use for shift B counter_2
+  uint16_t count_1b = 0;      //use for shift B counter_1
   uint16_t count_2b = 0;      //use for shift B counter_2
-  uint16_t count_1c = 0;      //use for shift C counter_2
-  uint16_t count_2c = 0;      //use for shift C  counter_2
+  uint16_t count_1c = 0;      //use for shift C counter_1
+  uint16_t count_2c = 0;      //use for shift C counter_2
 } default_val, running_val;
 
 enum EepromPrivateAddress { 
@@ -61,6 +62,7 @@ enum EepromPrivateAddress {
   _ADDR_Mod_Config     = _ADDR_DeviceId + 5,  //5bytes reserved for modbus serial mode
   _ADDR_Mod_Baud       = _ADDR_Mod_Config + 5,  //5bytes reserved for modbus serial baudrate 
   _ADDR_Net_tmout      = _ADDR_Mod_Baud   + 5,  //5bytes reserved for network timeout  
+  _ADDR_Debounce_tm    = _ADDR_Net_tmout  + 5,  //5bytes reserved for debouncing time
   _ADDR_L_epoch_c1     = _ADDR_Net_tmout  + 5,  //5bytes reserved for last event epoch counter 1  
   _ADDR_L_epoch_c2     = _ADDR_L_epoch_c1 + 5,  //5bytes reserved for last event epoch counter 2
   _ADDR_count_1a       = _ADDR_L_epoch_c2 + 5,  //5bytes reserved for counter_1 for shift A 
@@ -128,12 +130,31 @@ word _baud,
 #endif//USE_MODBUS
 
 //------------------MODULE_MODBUS_COUNTER-----------
-#ifdef USE_MODBUS 
-//-----------INPUT Button---------
+#ifdef USE_MODBUS  
+  
+//  byte TIMER_INTERVAL = 50;  //using for ti
+ byte critical_timer_interval = 50; //use for limit less then critical value will crash the code 
+  
+  //----------Manual relay  block--------
+//  #define O1 PB12 //RELAY1 
+  
+  //-----------INPUT Button---------
   #define INPUT_1 PA0 
   #define INPUT_2 PA1 
   #define Run_LED PC13
-
+  
+  //----------Input Button Variable------ 
+  
+  int state_s1  = HIGH;                   // the current state of the output pin
+  volatile bool val_s1   = false;                      //Value of the switch ("HIGH" or "LOW") 
+  volatile int last_state_s1   = LOW;     // the previous reading from the input pin
+   
+  int state_s2  = HIGH;                   // the current state of the output pin
+  volatile bool val_s2   = false;                      //Value of the switch ("HIGH" or "LOW") 
+  volatile int last_state_s2   = LOW;     // the previous reading from the input pin
+   
+  unsigned long lastDebounceTime_1 = 0;     // the last time the output 2 pin was toggled
+  unsigned long lastDebounceTime_2 = 0;     // the last time the output 2 pin was toggled
 #endif//USE_MODBUS
 
 

@@ -37,22 +37,27 @@ void  Init_Modbus_Var() {
   regBank.add(40002); // use for modbus configuration
   regBank.add(40003); // use for modbus baudrate 
   regBank.add(40004); // use for network timeout 
-
+  regBank.add(40005); // use for debouncing time 
+  regBank.add(40006); // use for restart the device
+  regBank.add(40007); // use for epoch LSB
+  regBank.add(40008); // use for epoch MSB
+  
   //Add Input registers 40001-40020 to the register bank
   /*
    * Use for counter value 
    */
+   
   regBank.add(30011);  //count_1a
   regBank.add(30012);  //count_1b
   regBank.add(30013);  //count_1c
-  regBank.add(30014);  //C1_lastEvent epoch MSB  //follow big endian
-  regBank.add(30015);  //C1_lastEvent epoch LSB
+  regBank.add(30014);  //C1_lastEvent epoch LSB  //follow big endian
+  regBank.add(30015);  //C1_lastEvent epoch MSB
   
   regBank.add(30021);  //count_2a 
   regBank.add(30022);  //count_2b
   regBank.add(30023);  //count_2c
-  regBank.add(30024);  //C2_lastEvent epoch MSB  
-  regBank.add(30025);  //C2_lastEvent epoch LSB
+  regBank.add(30024);  //C2_lastEvent epoch LSB  //follow little endian
+  regBank.add(30025);  //C2_lastEvent epoch MSB
 
   /*
     Assign the modbus device object to the protocol handler

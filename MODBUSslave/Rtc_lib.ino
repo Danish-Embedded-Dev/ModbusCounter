@@ -29,7 +29,28 @@ static uint8_t RTC_Months[2][12] = {
 //---------------------------------------------
 //-----------------PUBLIC-EPOCH-API------------ 
 //---------------------------------------------
-
+int check_shift(long epoch){
+    int _8hr_shift  = 28800;
+    int _24hr_shift = 86400;
+    int _24hr_shift_B = _24hr_shift + _8hr_shift;
+    uint8_t shift_A = 1; 
+    uint8_t shift_B = 2; 
+    uint8_t shift_C = 3; 
+    
+     if(epoch % _8hr_shift == 0 && epoch%_24hr_shift == 0 ){  
+            return shift_A;
+     }
+        
+     if(epoch % _8hr_shift == 0 && epoch%_24hr_shift == _8hr_shift ){  
+             return shift_B;
+     }
+        
+    if(epoch % _8hr_shift == 0 && epoch%_24hr_shift == 2*_8hr_shift ){  
+             return shift_C;
+    }
+    
+    return -1 ;
+}
  /**
    * Sets up the RTC epoch time
    * @param epoch the current epouch time  

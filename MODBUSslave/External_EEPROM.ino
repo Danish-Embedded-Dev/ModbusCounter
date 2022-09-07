@@ -42,6 +42,14 @@ void Init_EEPROM_Var() {
     running_val.net_timeout = default_val.net_timeout;
   }
 
+  int Temp_debounce_tm = EE.eeprom_read_Int(_ADDR_Debounce_tm); 
+  if (Temp_debounce_tm != -1  || Temp_debounce_tm <= critical_timer_interval) { //debounce is critical to '0' it will crash the timer routine
+    running_val.debounce_tm = Temp_debounce_tm;
+  } else {
+    EE.eeprom_write_Int(_ADDR_Debounce_tm, default_val.debounce_tm);
+    running_val.debounce_tm = default_val.debounce_tm;
+  }
+
   uint32_t Temp_lst_epoch_c1 = EE.eeprom_read_Long(_ADDR_L_epoch_c1);
   if (Temp_lst_epoch_c1 != 65535 ) {
     running_val.lst_epoch_c1 = Temp_lst_epoch_c1;
@@ -74,7 +82,7 @@ void Init_EEPROM_Var() {
     running_val.count_2a = default_val.count_2a;
   }
 
-  uint16_t Temp_count_1b = EE.eeprom_read_Int(_ADDR_count_1b);
+  uint16_t Temp_count_1b = EE.eeprom_read_Int(_ADDR_count_1b); 
   if (Temp_count_1b != 65535 ) {
     running_val.count_1b = Temp_count_1b;
   } else {
@@ -113,6 +121,7 @@ void Init_EEPROM_Var() {
   DEBUG_PRINT("Modbus Config   :");  DEBUG_PRINTLN(Temp_mod_config);
   DEBUG_PRINT("Modbus Baudrate :");  DEBUG_PRINTLN(Temp_mod_baud);
   DEBUG_PRINT("Network timeout :");  DEBUG_PRINTLN(Temp_net_timeout);
+  DEBUG_PRINT("Debouncing time :");  DEBUG_PRINTLN(Temp_debounce_tm); 
   DEBUG_PRINT("last epoch c_1  :");  DEBUG_PRINTLN(Temp_lst_epoch_c1);
   DEBUG_PRINT("last epoch c_2  :");  DEBUG_PRINTLN(Temp_lst_epoch_c2);
   DEBUG_PRINT("count_1a        :");  DEBUG_PRINTLN(Temp_count_1a);
@@ -127,6 +136,7 @@ void Init_EEPROM_Var() {
   DEBUG_PRINT("Modbus Config   :");  DEBUG_PRINTLN(running_val.mod_config);
   DEBUG_PRINT("Modbus Baudrate :");  DEBUG_PRINTLN(running_val.mod_baud);
   DEBUG_PRINT("Network timeout :");  DEBUG_PRINTLN(running_val.net_timeout);
+  DEBUG_PRINT("Debouncing time :");  DEBUG_PRINTLN(running_val.debounce_tm); 
   DEBUG_PRINT("last epoch c_1  :");  DEBUG_PRINTLN(running_val.lst_epoch_c1);
   DEBUG_PRINT("last epoch c_2  :");  DEBUG_PRINTLN(running_val.lst_epoch_c2);
   DEBUG_PRINT("count_1a        :");  DEBUG_PRINTLN(running_val.count_1a);
@@ -141,6 +151,7 @@ void Init_EEPROM_Var() {
   DEBUG_PRINT("Modbus Config   :");  DEBUG_PRINTLN(default_val.mod_config);
   DEBUG_PRINT("Modbus Baudrate :");  DEBUG_PRINTLN(default_val.mod_baud);
   DEBUG_PRINT("Network timeout :");  DEBUG_PRINTLN(default_val.net_timeout);
+  DEBUG_PRINT("Debouncing time :");  DEBUG_PRINTLN(default_val.debounce_tm); 
   DEBUG_PRINT("last epoch c_1  :");  DEBUG_PRINTLN(default_val.lst_epoch_c1);
   DEBUG_PRINT("last epoch c_2  :");  DEBUG_PRINTLN(default_val.lst_epoch_c2);
   DEBUG_PRINT("count_1a        :");  DEBUG_PRINTLN(default_val.count_1a);
